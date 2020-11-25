@@ -1,0 +1,77 @@
+* {
+	font-family: "Comfortaa", sans-serif;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	background-color: black;
+	color: white;
+	text-align: center;
+}
+
+h1 {
+	background-image: linear-gradient(to right, rgba(0,150,50,0), rgba(0,150,50,1), rgba(0,150,50,0));
+	font-size: 65pt;
+	margin: 30px 0 0 0;
+	padding-top: 15px;
+	width: 100%;
+}
+
+p, label {
+	color: rgb(0,120,70);
+	letter-spacing: 0.2em;
+}
+
+button {
+	background-color: #111;
+	color: #555;
+	border: 7px outset #222;
+	border-radius: 50%;
+	font-size: 16pt;
+	height: 60px;
+	margin: 0;
+	width: 60px;
+}
+
+.butNum:hover {
+	border: 14px outset #111;
+	color: #999;
+}
+
+.operator, #CANCEL, #EQUALS {
+	background: #011000;
+	border: 7px outset #011000;
+	color: green;
+	font-size: 18pt;
+}
+
+.operator:hover {
+	border: 14px outset #010;
+	color: seagreen;
+}
+
+label {
+	background-image: linear-gradient(to right, rgba(0,150,50,0), rgba(0,150,50,0.2));
+	color: #ccc;
+	position: absolute;
+	bottom: 105px;
+	right: 0;
+	text-align: right;
+	width: 100px;
+}
+
+input {
+	background-color: black;
+	border: 0px solid transparent;
+	color: yellow;
+	font-size: 70pt;
+	height: 100px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	text-align: right;
+	width: 100%; 
+}
