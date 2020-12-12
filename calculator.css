@@ -48,7 +48,7 @@ button {
 	font-size: 18pt;
 }
 
-.operator:hover {
+.operator:hover, #CANCEL:hover, #EQUALS:hover {
 	border: 14px outset #010;
 	color: seagreen;
 }
