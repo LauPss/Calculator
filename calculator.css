@@ -20,58 +20,61 @@ h1 {
 	width: 100%;
 }
 
-p, label {
+.intro {
 	color: rgb(0,120,70);
 	letter-spacing: 0.2em;
+}
+
+#DISPLAY {
+	border: 7px outset #222;
+	box-sizing: border-box;
+	color: yellow;
+	font-size: 50pt;
+	height: 100px;
+	margin: 0 auto;
+	max-width: 30%;
+	min-width: 300px;
+	padding-right: 10px;
+	padding-top: 10px;
+	text-align: right;
+}
+
+#BUTCONTAINER {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	margin: 0 auto;
+	max-width: 30%;
+	min-width: 300px;
 }
 
 button {
 	background-color: #111;
 	color: #555;
 	border: 7px outset #222;
-	border-radius: 50%;
-	font-size: 16pt;
+	font-size: 3rem;
 	height: 60px;
 	margin: 0;
-	width: 60px;
 }
 
 .butNum:hover {
-	border: 14px outset #111;
 	color: #999;
 }
 
-.operator, #CANCEL, #EQUALS {
-	background: #011000;
+.operator, #CANCEL, #EQUALS, #DOT {
+	background-color: #011000;
 	border: 7px outset #011000;
 	color: green;
-	font-size: 18pt;
+	font-size: 3rem;
 }
 
 .operator:hover, #CANCEL:hover, #EQUALS:hover {
-	border: 14px outset #010;
 	color: seagreen;
 }
 
-label {
-	background-image: linear-gradient(to right, rgba(0,150,50,0), rgba(0,150,50,0.2));
-	color: #ccc;
-	position: absolute;
-	bottom: 105px;
-	right: 0;
-	text-align: right;
-	width: 100px;
-}
-
-input {
-	background-color: black;
-	border: 0px solid transparent;
-	color: yellow;
-	font-size: 70pt;
-	height: 100px;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	text-align: right;
-	width: 100%; 
+#EQUALS {
+	grid-column-start: 5;
+	grid-row-start: 1;
+	grid-row-end: span 4;
+	height: 100%;
+	font-size: 6rem;
 }

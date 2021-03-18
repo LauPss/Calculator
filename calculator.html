@@ -14,64 +14,112 @@
 
 <body>
 	<h1>Lichu's Calculator!</h1>
-	<p>Please, go ahead and write some numbers!</p>
-	<p>(Tested on Mozilla Firefox and Google Chrome only!)</p>
-	<button name="figure" class="butNum" value="1">1</button>
-	<button name="figure" class="butNum" value="2">2</button>
-	<button name="figure" class="butNum" value="3">3</button>
-	<button name="sign" id="PLUS" class="operator">+</button>
-	<br>
-	<button name="figure" class="butNum" value="4">4</button>
-	<button name="figure" class="butNum" value="5">5</button>
-	<button name="figure" class="butNum" value="6">6</button>
-	<button id="MINUS" class="operator">-</button>
-	<br>
-	<button name="figure" class="butNum" value="7">7</button>
-	<button name="figure" class="butNum" value="8">8</button>
-	<button name="figure" class="butNum" value="9">9</button>
-	<button id="MULT" class="operator">×</button>
-	<br>
-	<button name="figure" class="butNum" value="0">0</button>
-	<button id="CANCEL">C</button>
-	<button id="EQUALS">=</button>
-	<button id="DIVID" class="operator">÷</button>
-	<br>
-	<form>
-		<label for="DISPLAY">TOTAL</label>
-		<input type="number" name="Display" id="DISPLAY" value="">
-	</form>
+	<p class="intro">Please, go ahead and write some numbers!</p>
+	<p class="intro">(Tested on Mozilla Firefox and Google Chrome only!)</p>
+	<p id="DISPLAY">0</p>
+	<div id="BUTCONTAINER">
+		<button name="figure" class="butNum" value="1">1</button>
+		<button name="figure" class="butNum" value="2">2</button>
+		<button name="figure" class="butNum" value="3">3</button>
+		<button name="sign" id="PLUS" class="operator">+</button>
+		<button id="EQUALS">=</button>
+		<button name="figure" class="butNum" value="4">4</button>
+		<button name="figure" class="butNum" value="5">5</button>
+		<button name="figure" class="butNum" value="6">6</button>
+		<button id="MINUS" class="operator">-</button>
+		<button name="figure" class="butNum" value="7">7</button>
+		<button name="figure" class="butNum" value="8">8</button>
+		<button name="figure" class="butNum" value="9">9</button>
+		<button id="MULT" class="operator">×</button>
+		<button name="figure" class="butNum" value="0">0</button>
+		<button id="CANCEL">C</button>
+		<button name="figure" id="DOT" value=".">.</button>
+		<button id="DIVID" class="operator">÷</button>
+	</div>
 </body>	
 
 <script>
 	let factor1 = "";
 	let factor2 = "";
 
-	const displayScreen = document.querySelector('#DISPLAY');
-	displayScreen.setAttribute("value", 0);
-	displayScreen.addEventListener("change", (e) => {
-		factor1 = Number(displayScreen.getAttribute("value"));
-		});
+	let displayScreen = document.querySelector('#DISPLAY');
+	
+	/* works with keyboard */
+	
+	window.addEventListener("keydown", (e) => {
+		let numberString = "0123456789";
+		let operatorString = "+-*×÷/";
+		if ((numberString.includes(e.key) === true) || ((e.key === ".") && (dotFound === false))) {
+			if (displayScreen.textContent.length < 9) {
+				displayScreen.textContent = `${displayScreen.textContent}` + `${e.key}`;
+			} else {
+				alert("Character limit reached.");
+			}
+		} else if (operatorString.includes(e.key) === true) {
+			storevariable();
+			if (e.key === "+") {
+				displayScreen.classList.add("add");	
+			} else if (e.key === "-") {
+				displayScreen.classList.add("subtract");
+			} else if ((e.key === "*") && (e.key === "×")) {
+				displayScreen.classList.add("multiply");
+			} else if ((e.key === "÷") && (e.key === "/")) {
+				displayScreen.classList.add("divide");
+			} else if (e.key === "=") {
+				factor2 = Number(displayScreen.textContent);
+				operate();
+				displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain");
+			}
+		}
+	});
+	
+	/* works with onscreen buttons */
 	
 	const numberButtons = document.querySelectorAll('.butNum');
 	numberButtons.forEach((button) => {
 		button.addEventListener("click", (e) => {
-			displayScreen.setAttribute("value", Number(`${displayScreen.value}` + `${button.value}`));
+			if (displayScreen.textContent.length < 9) {
+				displayScreen.textContent = `${displayScreen.textContent}` + `${button.value}`;
+			} else {
+				alert("Character limit reached.");
+			}
 		});
+	});
+	
+	const dotButton = document.querySelector('#DOT');
+	let dotFound = displayScreen.textContent.includes(".");
+	dotButton.addEventListener("click", (e) => {
+		if (dotFound === false) {
+			displayScreen.textContent = (`${displayScreen.textContent}` + ".");
+		}
 	});
 	
 	const cancelButton = document.querySelector('#CANCEL');
 	cancelButton.addEventListener("click", (e) => {
-		displayScreen.setAttribute("value", 0);
+		displayScreen.textContent = 0;
+		factor1 = 0;
+		factor2 = 0;
+		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain");
 	});
 	
 	const operatorButtons = document.querySelectorAll('.operator');
 	operatorButtons.forEach((button) => {
 		button.addEventListener("click", (e) => {
-			factor1 = Number(displayScreen.getAttribute("value"));
-			displayScreen.setAttribute("value", 0);
-			return factor1;
+			if (displayScreen.classList.contains("chain") === true) {
+				calculate();
+				factor2 = "";
+			}
+			storevariable();
+			displayScreen.classList.add("chain");
 		});
 	});
+	
+	let storevariable = () => {
+		factor1 = Number(displayScreen.textContent);
+		console.log(factor1);
+		displayScreen.textContent = 0;
+		return factor1;
+	}
 	
 	let add = (factor1, factor2) => Number(factor1) + Number(factor2);
 	const plusButton = document.querySelector('#PLUS');
@@ -85,7 +133,7 @@
 		displayScreen.classList.add("subtract");
 	});
 	
-	let multiply = (factor1, factor2) => factor1 * factor2;
+	let multiply = (factor1, factor2) => Number(factor1) * Number(factor2);
 	const multButton = document.querySelector('#MULT');
 	multButton.addEventListener("click", (e) => {
 		displayScreen.classList.add("multiply");
@@ -105,28 +153,44 @@
 		displayScreen.classList.add("divide");
 	});
 	
+	let result = 0;
 	let operate = () => {
 		if (displayScreen.classList.contains("add")) {
-			displayScreen.setAttribute("value", add(factor1, factor2));
+			result = add(factor1, factor2);
 		} else if (displayScreen.classList.contains("subtract")) {
-			displayScreen.setAttribute("value", subtract(factor1, factor2));
+			result = subtract(factor1, factor2);
 		} else if (displayScreen.classList.contains("multiply")) {
-			displayScreen.setAttribute("value", multiply(factor1, factor2));
+			result = multiply(factor1, factor2);
 		} else if (displayScreen.classList.contains("divide")) {
 			if (factor2 === 0) {
 				alert("ERROR: Couldn't divide by 0.");
-				displayScreen.setAttribute("value", 0);
+				result = 0;
 			} else {
-				displayScreen.setAttribute("value", divide(factor1, factor2));
+				result = divide(factor1, factor2);
 			}
 		}
 	}
 	
+	const outputresult = () => {
+		if (result > 999999999) {
+			displayScreen.textContent = "Too big";
+		} else if ((Number.isInteger(result) === false) && (result.toString().length > 9)) {
+			displayScreen.textContent = result.toString().substring(0,10);
+		} else {
+			displayScreen.textContent = result;
+		}
+	}
+	
+	const calculate = () => {
+		factor2 = Number(displayScreen.textContent);
+		operate();
+		outputresult();
+		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain");
+		}
+	
 	const equalsButton = document.querySelector('#EQUALS');
 	equalsButton.addEventListener("click", (e) => {
-		factor2 = Number(displayScreen.getAttribute("value"));
-		operate();
-		displayScreen.classList.remove("add", "subtract", "multiply", "divide");
+		calculate();
 	});
 </script>
 </html>
