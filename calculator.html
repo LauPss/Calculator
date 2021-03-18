@@ -49,9 +49,10 @@
 	window.addEventListener("keydown", (e) => {
 		let numberString = "0123456789";
 		let operatorString = "+-*×÷/";
-		if ((numberString.includes(e.key) === true) || ((e.key === ".") && (dotFound === false))) {
+		if ((numberString.includes(e.key) === true) || ((e.key === ".") && (displayScreen.classList.contains("dotted") === false))) {
 			if (displayScreen.textContent.length < 9) {
 				displayScreen.textContent = `${displayScreen.textContent}` + `${e.key}`;
+				clearzero();
 			} else {
 				alert("Character limit reached.");
 			}
@@ -73,6 +74,15 @@
 		}
 	});
 	
+	/* removes unnecessary zero */
+	
+	let clearzero = () => {
+		let displayString = displayScreen.textContent;
+		if ((displayString[0] === "0") && (displayScreen.classList.contains("dotted") === false) && (displayScreen.textContent.length > 1)) {
+			displayScreen.textContent = displayString.substr(1);
+		}
+	};
+	
 	/* works with onscreen buttons */
 	
 	const numberButtons = document.querySelectorAll('.butNum');
@@ -80,17 +90,20 @@
 		button.addEventListener("click", (e) => {
 			if (displayScreen.textContent.length < 9) {
 				displayScreen.textContent = `${displayScreen.textContent}` + `${button.value}`;
+				clearzero();
 			} else {
 				alert("Character limit reached.");
 			}
 		});
 	});
 	
+	/* adding just one dot */
+	
 	const dotButton = document.querySelector('#DOT');
-	let dotFound = displayScreen.textContent.includes(".");
 	dotButton.addEventListener("click", (e) => {
-		if (dotFound === false) {
-			displayScreen.textContent = (`${displayScreen.textContent}` + ".");
+		if (displayScreen.classList.contains("dotted") === false) {
+			displayScreen.textContent = `${displayScreen.textContent}` + ".";
+			displayScreen.classList.add("dotted");
 		}
 	});
 	
@@ -99,7 +112,7 @@
 		displayScreen.textContent = 0;
 		factor1 = 0;
 		factor2 = 0;
-		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain");
+		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain", "dotted");
 	});
 	
 	const operatorButtons = document.querySelectorAll('.operator');
@@ -185,7 +198,7 @@
 		factor2 = Number(displayScreen.textContent);
 		operate();
 		outputresult();
-		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain");
+		displayScreen.classList.remove("add", "subtract", "multiply", "divide", "chain", "dotted");
 		}
 	
 	const equalsButton = document.querySelector('#EQUALS');
